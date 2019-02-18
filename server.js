@@ -1,14 +1,20 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 3009
 const mongoose = require('mongoose');
+var cors = require('cors')
+
+app.use(express.json());
+app.use(cors());
+
+
 
 
 mongoose.connect('mongodb://localhost:27017/testdb');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log("Jones");
+  console.log("Connected To Mongo");
 });
 
 var y = "Hello World"; 
@@ -30,7 +36,7 @@ app.get('/', (req, res) => res.send("Hello World"))
 
 
 app.post('/', function (req, res) {
-    let joke_string = req.query.joke; 
+    let joke_string = (req.body.joke);
     let joke_instance = new Joke({"joke":joke_string});
     console.log(joke_instance);
     joke_instance.save(function(err,joke_instance){
